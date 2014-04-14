@@ -2,6 +2,7 @@
 
 import math
 
+# complex number, in Cartesian representation
 class Complex(object):
     def __init__(self, a=0, b=0):
         self.a = a
@@ -61,6 +62,27 @@ class Complex(object):
 
     def conjugate(self):
         return Complex(self.a, -self.y)
+
+    # convert to polar coordinates
+    def polar(self):
+        p = self.modulus()
+        theta = math.atan(self.a / self.b)
+        return ComplexPolar(p, theta)
+
+# complex number, in polar representation
+class ComplexPolar(object):
+    def __init__(self, p, theta):
+        self.p = p
+        self.theta = theta
+
+    def __repr__(self):
+        return 'p={0}, theta={1}'.format(self.p, self.theta)
+
+    # convert to Cartesian coordinates
+    def cartesian(self):
+        a = self.p * math.cos(self.theta)
+        b = self.p * math.sin(self.theta)
+        return Complex(a, b)
 
 if __name__ == '__main__':
     pass
