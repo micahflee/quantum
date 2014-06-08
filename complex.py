@@ -139,9 +139,9 @@ class ComplexMatrix(object):
     #   [ 4i      8    ]
     #   [ 12-2i   2i   ]
     # You do:
-    #   ComplexVector([
-    #       [Complex(1,1),  Complex(0,4), Complex(12,-2)],
-    #       [Complex(3,-2), Complex(8,0), Complex(0,2)]
+    #   ComplexMatrix([
+    #       ComplexVector([Complex(1,1),  Complex(0,4), Complex(12,-2)]),
+    #       ComplexVector([Complex(3,-2), Complex(8,0), Complex(0,2)])
     #   ])
     def __init__(self, L):
         # validate that all objects in L are ComplexVectors
