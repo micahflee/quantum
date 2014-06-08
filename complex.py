@@ -7,6 +7,10 @@ class InvalidVectorException(Exception):
     pass
 class VectorLenMismatchException(Exception):
     pass
+class InvalidMatrixException(Exception):
+    pass
+class MatrixLenMismatchException(Exception):
+    pass
 
 # complex number, in Cartesian representation
 class Complex(object):
@@ -127,6 +131,68 @@ class ComplexVector(object):
             L.append(c*scalar_c)
         return ComplexVector(L)
 
+# a matrix in complex number space
+class ComplexMatrix(object):
+    # L is a list of lists of Complex objects
+    # To make this vector:
+    #   [ 1+1i    3-2i ]
+    #   [ 4i      8    ]
+    #   [ 12-2i   2i   ]
+    # You do:
+    #   ComplexVector([
+    #       [Complex(1,1),  Complex(0,4), Complex(12,-2)],
+    #       [Complex(3,-2), Complex(8,0), Complex(0,2)]
+    #   ])
+    def __init__(self, L):
+        # validate that all objects in L are ComplexVectors
+        for v in L:
+            if not isinstance(v, ComplexVector):
+                raise InvalidMatrixException()
+        # validate that each vector is the same length
+        if len(L) > 0:
+            self.vector_length = len(L[0].L)
+            for v in L:
+                if len(v.L) != self.vector_length:
+                    raise MatrixLenMismatchException()
+
+        self.L = L
+
+    def __repr__(self):
+        return str(self.L)
+
+    def check_len(self, other):
+        if len(self.L) == len(other.L):
+            for v in other.L:
+                if len(v.L != self.vector_length):
+                    raise MatrixLenMismatchException()
+        else:
+            raise MatrixLenMismatchException()
+
+        return True
+
+    def __add__(self, other):
+        if not self.check_len(other):
+            return
+
+        L = []
+        for i in range(len(self.L)):
+            L.append(self.L[i] + other.L[i])
+        return ComplexMatrix(L)
+
+    def scalar_mul(self, scalar_c):
+        L = []
+        for v in self.L:
+            L.append(v.scalar_mul(scalar_c))
+        return ComplexMatrix(L)
 
 if __name__ == '__main__':
-    pass
+    c1 = Complex(2,1)
+    c2 = Complex(1,2)
+    A = ComplexMatrix([
+        ComplexVector([Complex(1,-1), Complex(2,2)]),
+        ComplexVector([Complex(3,0),  Complex(4,1)])
+    ])
+
+    c3 = c1*c2
+    print A.scalar_mul(c3)
+
