@@ -163,7 +163,7 @@ class ComplexMatrix(object):
     def check_len(self, other):
         if len(self.L) == len(other.L):
             for v in other.L:
-                if len(v.L != self.vector_length):
+                if len(v.L) != self.vector_length:
                     raise MatrixLenMismatchException()
         else:
             raise MatrixLenMismatchException()
@@ -186,13 +186,5 @@ class ComplexMatrix(object):
         return ComplexMatrix(L)
 
 if __name__ == '__main__':
-    c1 = Complex(2,1)
-    c2 = Complex(1,2)
-    A = ComplexMatrix([
-        ComplexVector([Complex(1,-1), Complex(2,2)]),
-        ComplexVector([Complex(3,0),  Complex(4,1)])
-    ])
-
-    c3 = c1*c2
-    print A.scalar_mul(c3)
+    pass
 
