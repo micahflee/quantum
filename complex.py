@@ -2,6 +2,12 @@
 
 import math
 
+# exceptions
+class InvalidVectorException(Exception):
+    pass
+class VectorLenMismatchException(Exception):
+    pass
+
 # complex number, in Cartesian representation
 class Complex(object):
     def __init__(self, a=0, b=0):
@@ -39,9 +45,9 @@ class Complex(object):
 
     def __add__(self, other):
         return Complex(
-            self.a + other.a, 
+            self.a + other.a,
             self.b + other.b)
-    
+
     def __sub__(self, other):
         return Complex(
             self.a - other.a,
@@ -49,9 +55,9 @@ class Complex(object):
 
     def __mul__(self, other):
         return Complex(
-            self.a*other.a - self.b*other.b, 
+            self.a*other.a - self.b*other.b,
             self.a*other.b + other.a*self.b)
-    
+
     def __div__(self, other):
         x = (self.a*other.a + self.b*other.b) / (other.a**2 + other.b**2)
         y = (other.a*self.b - self.a*other.b) / (other.a**2 + other.b**2)
@@ -83,6 +89,44 @@ class ComplexPolar(object):
         a = self.p * math.cos(self.theta)
         b = self.p * math.sin(self.theta)
         return Complex(a, b)
+
+# a vector in complex number space
+class ComplexVector(object):
+    def __init__(self, L):
+        for c in L:
+            if not isinstance(c, Complex):
+                raise InvalidVectorException()
+        self.L = L
+
+    def __repr__(self):
+        return str(self.L)
+
+    def check_len(self, other):
+        if len(self.L) == len(other.L):
+            return True
+        raise VectorLenMismatchException()
+
+    def __add__(self, other):
+        if not self.check_len(other):
+            return
+
+        L = []
+        for i in range(len(self.L)):
+            L.append(self.L[i] + other.L[i])
+        return ComplexVector(L)
+
+    def inverse(self):
+        L = []
+        for c in self.L:
+            L.append(Complex(-c.a, -c.b))
+        return ComplexVector(L)
+
+    def scalar_mul(self, scalar_c):
+        L = []
+        for c in self.L:
+            L.append(c*scalar_c)
+        return ComplexVector(L)
+
 
 if __name__ == '__main__':
     pass
