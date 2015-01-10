@@ -185,6 +185,79 @@ class ComplexMatrix(object):
             L.append(v.scalar_mul(scalar_c))
         return ComplexMatrix(L)
 
+# a boolean matrix
+class BooleanMatrix(object):
+    # L is a list of lists
+    # To make this matrix:
+    #   [ 0 0 0 0 0 0 ]
+    #   [ 0 0 0 0 0 0 ]
+    #   [ 0 1 0 0 0 1 ]
+    #   [ 0 0 0 1 0 0 ]
+    #   [ 0 0 1 0 0 0 ]
+    #   [ 1 0 0 0 1 0 ]
+    # You do:
+    #   BooleanMatrix([
+    #       [0, 0, 0, 0, 0, 1],
+    #       [0, 0, 1, 0, 0, 0],
+    #       [0, 0, 0, 0, 1, 0],
+    #       [0, 0, 0, 1, 0, 0],
+    #       [0, 0, 0, 0, 0, 1],
+    #       [0, 0, 1, 0, 0, 0]
+    #   ])
+    def __init__(self, L):
+        # validate that all objects in L are lists
+        for v in L:
+            if not isinstance(v, list):
+                raise InvalidMatrixException()
+        # validate that each vector is the same length
+        if len(L) > 0:
+            self.vector_length = len(L[0])
+            for v in L:
+                if len(v) != self.vector_length:
+                    raise MatrixLenMismatchException()
+
+        self.L = L
+
+    def __repr__(self):
+        s = ''
+        for j in range(self.vector_length):
+            s += '[ '
+            for i in range(len(self.L)):
+                s += str(self.L[i][j]) + ' '
+            s += ']\n'
+
+        return s
+
+    def check_len(self, other):
+        if len(self.L) == len(other.L):
+            for v in other.L:
+                if len(v) != self.vector_length:
+                    raise MatrixLenMismatchException()
+        else:
+            raise MatrixLenMismatchException()
+
+        return True
+
+    # multiple boolean matrices
+    def __mul__(self, other):
+        # make new_L a blank boolean matrix of the same size
+        new_L = []
+        for i in range(len(self.L)):
+            new_L.append([])
+            for j in range(self.vector_length):
+                new_L[i].append(0)
+
+        # calculate the next step
+        for j in range(self.vector_length):
+            for i in range(len(self.L)):
+                # calculating new_L[i][j]
+                for k in range(self.vector_length):
+                    if self.L[i][k] == 1 and other.L[k][j] == 1:
+                        new_L[i][j] = 1
+
+        return BooleanMatrix(new_L)
+
+
 if __name__ == '__main__':
     pass
 
