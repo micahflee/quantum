@@ -179,6 +179,23 @@ class ComplexMatrix(object):
             L.append(self.L[i] + other.L[i])
         return ComplexMatrix(L)
 
+    def __mul__(self, other):
+        if not self.check_len(other):
+            return
+
+        L = []
+        for i in range(self.vector_length):
+            v = ComplexVector([])
+            for j in range(self.vector_length):
+                # L[i][j] = self.L[0][j]*other.L[i][0] + self.L[1][j]&other.L[i][1], + ...
+                val = Complex(0, 0)
+                for k in range(self.vector_length):
+                    val += self.L[k].L[j] * other.L[i].L[k]
+                v.L.append(val)
+            L.append(v)
+
+        return ComplexMatrix(L)
+
     def scalar_mul(self, scalar_c):
         L = []
         for v in self.L:
@@ -247,9 +264,8 @@ class BooleanMatrix(object):
             for j in range(self.vector_length):
                 new_L[i].append(0)
 
-        # calculate the next step
-        for j in range(self.vector_length):
-            for i in range(len(self.L)):
+        for j in range(len(self.L)):
+            for i in range(self.vector_length):
                 # calculating new_L[i][j]
                 for k in range(self.vector_length):
                     if self.L[i][k] == 1 and other.L[k][j] == 1:
@@ -257,6 +273,20 @@ class BooleanMatrix(object):
 
         return BooleanMatrix(new_L)
 
+    # multiply by a ComplexVector, returning a new ComplexVector
+    def vector_mul(self, v):
+        # create an empty new_v vector
+        new_v = []
+        for i in range(len(v.L)):
+            new_v.append(Complex(0,0))
+
+        # loop through matrix
+        for j in range(len(self.L)):
+            for i in range(self.vector_length):
+                if self.L[i][j] == 1:
+                    new_v[j] += v.L[i]
+
+        return ComplexVector(new_v)
 
 if __name__ == '__main__':
     pass
