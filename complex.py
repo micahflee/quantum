@@ -211,6 +211,15 @@ class ComplexMatrix(object):
             L.append(v.scalar_mul(scalar_c))
         return ComplexMatrix(L)
 
+    def modulus_sq(self):
+        matrix_list = []
+        for i in range(self.vector_length):
+            vector_list = []
+            for j in range(self.vector_length):
+                vector_list.append( Complex(self.L[i].L[j].modulus_sq()) )
+            matrix_list.append(ComplexVector(vector_list))
+        return ComplexMatrix(matrix_list)
+
 # a boolean matrix
 class BooleanMatrix(object):
     # L is a list of lists
