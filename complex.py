@@ -158,7 +158,14 @@ class ComplexMatrix(object):
         self.L = L
 
     def __repr__(self):
-        return str(self.L)
+        s = ''
+        for j in range(self.vector_length):
+            s += '[ '
+            for i in range(len(self.L)):
+                s += str(self.L[i].L[j]) + '\t'
+            s += ']\n'
+
+        return s
 
     def check_len(self, other):
         if len(self.L) == len(other.L):
