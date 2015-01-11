@@ -70,6 +70,9 @@ class Complex(object):
     def modulus(self):
         return math.sqrt(self.a**2 + self.b**2)
 
+    def modulus_sq(self):
+        return self.a**2 + self.b**2
+
     def conjugate(self):
         return Complex(self.a, -self.y)
 
@@ -194,7 +197,6 @@ class ComplexMatrix(object):
         for i in range(self.vector_length):
             v = ComplexVector([])
             for j in range(self.vector_length):
-                # L[i][j] = self.L[0][j]*other.L[i][0] + self.L[1][j]&other.L[i][1], + ...
                 val = Complex(0, 0)
                 for k in range(self.vector_length):
                     val += self.L[k].L[j] * other.L[i].L[k]
@@ -285,7 +287,7 @@ class BooleanMatrix(object):
         # create an empty new_v vector
         new_v = []
         for i in range(len(v.L)):
-            new_v.append(Complex(0,0))
+            new_v.append(Complex(0))
 
         # loop through matrix
         for j in range(len(self.L)):
