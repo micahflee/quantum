@@ -134,6 +134,20 @@ class ComplexVector(object):
             L.append(c*scalar_c)
         return ComplexVector(L)
 
+    def absval(self):
+        # ||x>| = sqrt(|c1|**2 + |c2|**2) + ... + |c(n-1)|**2)
+        v = 0
+        for c in self.L:
+            v += c.modulus_sq()
+        return math.sqrt(v)
+
+    def normalize(self):
+        absval_c = Complex(self.absval())
+        L = []
+        for c in self.L:
+            L.append( c/absval_c )
+        return L
+
 # a matrix in complex number space
 class ComplexMatrix(object):
     # L is a list of lists of Complex objects
